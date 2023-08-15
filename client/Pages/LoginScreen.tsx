@@ -1,17 +1,26 @@
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import FloatingLabelInput from "../Components/FloatingLabelInput";
 import Button from "../Components/Button";
+import { NavigationProp } from "@react-navigation/native";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-const LoginScreen = () => {
+type Props = {
+  navigation: NavigationProp<any>;
+};
+
+const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
-    <View>
+    <View style={styles.loginContainer}>
       <View style={styles.logoContainer}>
         <Image
-          source={require("../Assets/HealthConnect-Logo.png")}
+          source={require("../Assets/HealthConnect-St.png")}
           alt="logo"
           style={styles.logo}
         />
@@ -35,6 +44,20 @@ const LoginScreen = () => {
           onChangeText={setPassword}
           value={password}
         />
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          <Text style={{ color: "#999999" }}>Don't have an account?.. </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Register");
+            }}
+          >
+            <Text style={{ color: "#129FC6" }}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.buttonContainer}>
         <Button title="Login" onPress={() => {}} />
@@ -46,10 +69,11 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
+  loginContainer: { backgroundColor: "white", flex: 1 },
   logoContainer: {},
   logo: {
-    width: "100%",
-    height: 100,
+    width: wp(50),
+    height: 60,
     resizeMode: "contain",
   },
   vectorContainer: {
