@@ -29,6 +29,28 @@ const RegisterScreen: React.FC<Prop> = ({ navigation }) => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [gender, setGender] = useState("");
   const [phone, setPhone] = useState("");
+
+  const handleSignUp = () => {
+    if (password !== confirmPassword) {
+      console.log("Password and ConfirmPassword is not same");
+      throw new Error("Password and ConfirmPassword must be same");
+    }
+    if (
+      email === "" &&
+      password === "" &&
+      bloodGroup === "" &&
+      gender === "" &&
+      phone === ""
+    ) {
+      console.log("Fill nessesary fields");
+      throw new Error("Please fill nessesary fields");
+    }
+    const formData = { email, password, bloodGroup, gender, phone, username };
+    navigation.navigate("Address", {
+      formData,
+    });
+  };
+
   return (
     <View style={{ padding: 10, backgroundColor: "white", flex: 1 }}>
       <View>
@@ -96,11 +118,7 @@ const RegisterScreen: React.FC<Prop> = ({ navigation }) => {
           </View>
         </ScrollView>
         <View style={{ padding: 10, alignItems: "flex-end" }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Address");
-            }}
-          >
+          <TouchableOpacity onPress={handleSignUp}>
             <Icon name="arrow-right" size={35} />
           </TouchableOpacity>
         </View>

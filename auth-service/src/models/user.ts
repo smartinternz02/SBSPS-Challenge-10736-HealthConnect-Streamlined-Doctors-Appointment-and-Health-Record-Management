@@ -7,6 +7,8 @@ interface UserAttrs {
   email: string;
   phoneNumber: string;
   password: string;
+  gender: string;
+  bloodGroup: string;
   address: mongoose.Types.ObjectId;
 }
 
@@ -19,38 +21,60 @@ interface UserDoc extends mongoose.Document {
   email: string;
   phoneNumber: string;
   password: string;
+  gender: string;
+  bloodGroup: string;
   address: string;
 }
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      minLength: 5,
+      maxLength: 20,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    bloodGroup: {
+      type: String,
+      required: true,
+    },
+    gender: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+    },
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-    unique: true,
-    minLength: 5,
-    maxLength: 20,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Address",
-  },
-  role: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Role",
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 userSchema.pre("save", async function (done) {
   console.log("hashing");

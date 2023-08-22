@@ -17,3 +17,10 @@ spec:
                 name: auth-service-srv
                 port:
                   number: 3000
+          - path: /api/appointments/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: appointments-srv
+                port:
+                  number: 3001

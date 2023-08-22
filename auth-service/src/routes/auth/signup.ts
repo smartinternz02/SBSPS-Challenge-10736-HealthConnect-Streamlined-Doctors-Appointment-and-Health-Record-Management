@@ -1,12 +1,11 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import { RequestValidationErrors } from "../../errors/request-validation-error";
+import { body } from "express-validator";
 import { User, buildUser } from "../../models/user";
-import { BadRequestError } from "../../errors/bad-request-erro";
+import { BadRequestError } from "../../errors/bad-request-error";
 import { Address } from "../../models/address";
 import { Token } from "../../models/token";
 import { generateJWT } from "../../services/generatejwt";
-// import jwt from "jsonwebtoken";
+import { validateRequest } from "../../middleware/validate-request";
 
 const router = express.Router();
 
@@ -14,7 +13,9 @@ router.post(
   "/api/users/signup",
   [
     body("email").isEmail().withMessage("Email must be Valid"),
-    body("username").isString().withMessage("Username must be string"),
+    body("username").isString().withMessage("username must be Specified"),
+    body("bloodGroup").isString().withMessage("BloodGroup must be Specified"),
+    body("gender").isString().withMessage("Gender must be Specified"),
     body("password")
       .trim()
       .isLength({ min: 4, max: 20 })
@@ -30,18 +31,15 @@ router.post(
     body("country").isString().withMessage("Country must be string"),
     body("pincode").isNumeric().withMessage("pincode must be Number"),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.log(errors);
-      throw new RequestValidationErrors(errors.array());
-    }
-
     const {
       username,
       email,
       password,
       phone,
+      gender,
+      bloodGroup,
       address,
       area,
       city,
@@ -70,15 +68,32 @@ router.post(
       username,
       phoneNumber: phone,
       address: newAddress._id,
+      gender: gender,
+      bloodGroup: bloodGroup,
     });
     await user.save();
+    const userJWT = generateJWT({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      phoneNumber: user.phoneNumber,
+      gender: user.gender,
+      bloodGrouup: user.bloodGroup,
+      address: user.address.toString(),
+    });
+
     const token = new Token({
       user_id: user._id,
       token_type: "registration",
-      token_value: generateJWT(user._id),
+      token_value: userJWT,
       expiration: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
     await token.save();
+
+    req.session = {
+      jwt: userJWT,
+    };
+
     console.log("User Created");
     return res.status(201).send(user);
   }
