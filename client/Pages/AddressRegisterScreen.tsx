@@ -133,16 +133,16 @@ const AddressRegisterScreen = ({ navigation, route }: AddressProps) => {
         onPress={() => navigation.navigate("Register")}
       >
         <Icon name="arrow-left" size={30} />
-        <Text
-          style={{
-            color: "black",
-            fontSize: 16,
-            // fontFamily: "Helvetica",
-          }}
-        >
-          Please Enter More Details
-        </Text>
       </Pressable>
+      <Text
+        style={{
+          color: "black",
+          fontSize: 16,
+          // fontFamily: "Helvetica",
+        }}
+      >
+        Please Enter More Details
+      </Text>
       <View style={{ flex: 1 }}>
         <FloatingLabelInput
           label="Address"

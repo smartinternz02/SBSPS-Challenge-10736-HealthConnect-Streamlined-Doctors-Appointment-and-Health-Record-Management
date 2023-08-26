@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "City General Hospital",
+    "address": "123 Main Street, City",
+    "contact": "123-456-7890",
+    "type": "Government Hospital"
+  },
+  {
+    "id": 2,
+    "name": "Sunrise Multispeciality Hospital",
+    "address": "456 Elm Avenue, Town",
+    "contact": "987-654-3210",
+    "type": "Multispeciality Hospital"
+  },
+  {
+    "id": 3,
+    "name": "Grace Private Clinic",
+    "address": "789 Oak Road, Suburb",
+    "contact": "555-123-4567",
+    "type": "Private Clinic"
+  },
+  {
+    "id": 4,
+    "name": "Metro Health Center",
+    "address": "789 Maple Lane, Downtown",
+    "contact": "777-888-9999",
+    "type": "Government Hospital"
+  },
+  {
+    "id": 5,
+    "name": "Elite Medical Center",
+    "address": "321 Pine Street, Urban",
+    "contact": "222-333-4444",
+    "type": "Multispeciality Hospital"
+  }
+]

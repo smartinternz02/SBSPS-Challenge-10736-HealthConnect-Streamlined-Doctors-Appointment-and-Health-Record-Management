@@ -7,6 +7,10 @@ import SplashScreen from "./Pages/SplashScreen";
 import RegisterScreen from "./Pages/RegisterScreen";
 import AddressRegisterScreen from "./Pages/AddressRegisterScreen";
 import Home from "./Pages/Home";
+import BookAppointment from "./Pages/HospitalSelect";
+import NearbyHospitals from "./Pages/NearbyHospitals";
+import BookingAppointment from "./Pages/BookingAppointment";
+import AppointmentConfimration from "./Pages/AppointmentConfimration";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +23,16 @@ function App(): JSX.Element {
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Address" component={AddressRegisterScreen} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="HospitalSelection" component={BookAppointment} />
+        <Stack.Screen name="NearbyHospitals" component={NearbyHospitals} />
+        <Stack.Screen
+          name="BookingAppointment"
+          component={BookingAppointment}
+        />
+        <Stack.Screen
+          name="AppointmentConfirmation"
+          component={AppointmentConfimration}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

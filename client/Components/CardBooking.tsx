@@ -1,16 +1,32 @@
-import { StyleSheet, Text, View, Image, Button, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Button,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { NavigationProp } from "@react-navigation/native";
 
 interface Props {
   message: string;
   photoUrl?: any;
+  onPress?: () => void;
+  navigation: NavigationProp<any>;
 }
 
-const CardBooking: React.FC<Props> = ({ message, photoUrl }) => {
+const CardBooking: React.FC<Props> = ({
+  message,
+  photoUrl,
+  onPress,
+  navigation,
+}) => {
   return (
     <View style={styles.cardContainer}>
       <View
@@ -30,9 +46,11 @@ const CardBooking: React.FC<Props> = ({ message, photoUrl }) => {
         )}
       </View>
       {/* <Button title="Book Now" stylesBtn={styles.btnStyle} onPress={() => {}} /> */}
-      <Pressable style={styles.btnStyle}>
-        <Button title="Book Now" />
-      </Pressable>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("HospitalSelection")}
+      >
+        <Text>Book Now</Text>
+      </TouchableOpacity>
     </View>
   );
 };

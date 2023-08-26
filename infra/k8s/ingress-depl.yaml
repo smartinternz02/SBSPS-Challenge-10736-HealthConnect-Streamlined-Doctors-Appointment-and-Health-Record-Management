@@ -11,7 +11,7 @@ spec:
       http:
         paths:
           - path: /api/users/?(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: auth-service-srv
@@ -21,6 +21,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: appointments-srv
+                name: appointment-service-srv
                 port:
                   number: 3001

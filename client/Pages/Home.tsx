@@ -16,9 +16,12 @@ const Home = ({ navigation, route }: HomeProps) => {
   const { userData }: any = route.params;
   const customerImg = require("../Assets/24X7.png");
   const doctorPng = require("../Assets/doctor-bg.png");
+  const onNavigationButton = () => {
+    navigation.navigate("HospitalSelection");
+  };
   return (
     <HeaderTemplate>
-      <Text>Welcome,</Text>
+      <Text>Welcome {userData.username},</Text>
       <View
         style={{
           alignItems: "center",
@@ -36,8 +39,17 @@ const Home = ({ navigation, route }: HomeProps) => {
           justifyContent: "center",
         }}
       >
-        <CardBooking message="Book Your  Appointment" photoUrl={customerImg} />
-        <CardBooking message="Emergency Appointment" photoUrl={doctorPng} />
+        <CardBooking
+          message="Book Your  Appointment"
+          photoUrl={customerImg}
+          // onPress={onNavigationButton}
+          navigation={navigation}
+        />
+        <CardBooking
+          message="Emergency Appointment"
+          photoUrl={doctorPng}
+          navigation={navigation}
+        />
       </View>
     </HeaderTemplate>
   );

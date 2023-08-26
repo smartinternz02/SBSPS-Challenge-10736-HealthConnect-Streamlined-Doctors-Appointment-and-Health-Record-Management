@@ -16,7 +16,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: "auth-service/src/**/*.ts"
+            src: "src/**/*.ts"
     - image: sowrerajan/appointment-service
       context: appointment-service
       docker:
@@ -24,4 +24,4 @@ build:
       sync:
         manual:
           - dest: .
-            src: "appointment-service/src/**/*.ts"
+            src: "src/**/*.ts"

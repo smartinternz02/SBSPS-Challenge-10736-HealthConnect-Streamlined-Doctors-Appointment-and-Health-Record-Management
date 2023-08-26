@@ -6,6 +6,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useRoute } from "@react-navigation/native";
+import EStyleSheet from "react-native-extended-stylesheet";
 
 interface Props {
   children: React.ReactNode;
@@ -72,7 +73,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 5,
+    paddingTop: 5, // Add padding at the top
+    paddingBottom: 60,
   },
   footer: {
     flexDirection: "row",
