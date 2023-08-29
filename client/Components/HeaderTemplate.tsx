@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import ExitIcon from "react-native-vector-icons/Ionicons";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { useRoute } from "@react-navigation/native";
-import EStyleSheet from "react-native-extended-stylesheet";
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/authSlice";
 
 interface Props {
   children: React.ReactNode;
@@ -14,13 +17,37 @@ interface Props {
 
 const HeaderTemplate: React.FC<Props> = ({ children }) => {
   const route = useRoute();
-
+  const navigation = useNavigation<NavigationProp<any>>();
+  const { isAuthenticated } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
+  const handleSignOut = () => {
+    dispatch(logout());
+    navigation.navigate("Login");
+  };
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../Assets/HealthConnect-St.png")}
-        style={styles.logoStyle}
-      />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: 5,
+        }}
+      >
+        <Image
+          source={require("../Assets/HealthConnect-St.png")}
+          style={styles.logoStyle}
+        />
+
+        {isAuthenticated && (
+          <TouchableOpacity onPress={handleSignOut}>
+            <ExitIcon
+              name="exit-outline"
+              style={{ fontSize: 25, padding: 10 }}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
 
       {/* Main content */}
       <View style={styles.content}>{children}</View>
@@ -32,6 +59,7 @@ const HeaderTemplate: React.FC<Props> = ({ children }) => {
             styles.footerIcon,
             route.name === "Home" && styles.highlightedIcon,
           ]}
+          onPress={() => navigation.navigate("Home")}
         >
           <Icon name="home" size={24} color="#ffffff" />
           {route.name === "Home" && <Text style={styles.iconText}>Home</Text>}
@@ -39,22 +67,26 @@ const HeaderTemplate: React.FC<Props> = ({ children }) => {
         <TouchableOpacity
           style={[
             styles.footerIcon,
-            route.name === "Analytics" && styles.highlightedIcon,
+            route.name === "Visits" && styles.highlightedIcon,
           ]}
+          onPress={() => navigation.navigate("Visits")}
         >
           <Icon name="bar-chart" size={24} color="#ffffff" />
-          {route.name === "Analytics" && (
-            <Text style={styles.iconText}>Analytics</Text>
+          {route.name === "Visits" && (
+            <Text style={styles.iconText}>Visits</Text>
           )}
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.footerIcon,
-            route.name === "User" && styles.highlightedIcon,
+            route.name === "Profile" && styles.highlightedIcon,
           ]}
+          onPress={() => navigation.navigate("Profile")}
         >
           <Icon name="user" size={24} color="#ffffff" />
-          {route.name === "User" && <Text style={styles.iconText}>User</Text>}
+          {route.name === "Profile" && (
+            <Text style={styles.iconText}>Profile</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>

@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+  ScrollView,
+} from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -12,6 +19,9 @@ import Button from "../Components/Button";
 import { NavigationProp, RouteProp } from "@react-navigation/native";
 import countryListData from "../contries.json";
 import { Country, State, City } from "country-state-city";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../redux/userSlice";
+import { login, register } from "../redux/authSlice";
 
 interface AddressProps {
   navigation: NavigationProp<any>;
@@ -54,6 +64,8 @@ const AddressRegisterScreen = ({ navigation, route }: AddressProps) => {
     }[]
   >([]);
 
+  const dispatch = useDispatch();
+
   const handleCreateUser = async () => {
     if (
       address === "" ||
@@ -79,9 +91,11 @@ const AddressRegisterScreen = ({ navigation, route }: AddressProps) => {
       country: selectedCountry,
     };
     setDataFromRegister(newDatas);
-    navigation.navigate("Home", {
-      user: dataFromRegister,
-    });
+    // navigation.navigate("Home", {
+    //   user: dataFromRegister,
+    // });
+    dispatch(register(dataFromRegister));
+    navigation.navigate("Login");
     // try {
     //   console.log("trying");
     //   await axios
@@ -143,74 +157,17 @@ const AddressRegisterScreen = ({ navigation, route }: AddressProps) => {
       >
         Please Enter More Details
       </Text>
-      <View style={{ flex: 1 }}>
-        <FloatingLabelInput
-          label="Address"
-          onChangeText={setAddress}
-          value={address}
-        />
-        <FloatingLabelInput label="Area" onChangeText={setArea} value={area} />
-        <View style={styles.regionContainer}>
-          <Text
-            style={{
-              fontSize: 16,
-              color: "#015867",
-              marginBottom: 5,
-              fontFamily: "Helvetica",
-            }}
-          >
-            Select a Region
-          </Text>
-
-          <Dropdown
-            data={countries}
-            search
-            maxHeight={300}
-            labelField="countryname"
-            valueField="countryname"
-            placeholder={!isFocus ? "Select a Country" : "..."}
-            searchPlaceholder="Search..."
-            value={selectedCountry}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setSelectedCountry(item.countryname);
-              handleCountryState(item.countryIso);
-              setIsFocus(false);
-            }}
-            keyboardAvoiding={true}
-            style={styles.regionSelector}
+      <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <FloatingLabelInput
+            label="Address"
+            onChangeText={setAddress}
+            value={address}
           />
-        </View>
-        <View style={styles.regionContainer}>
-          <Text
-            style={{
-              fontSize: 16,
-              color: "#015867",
-              marginBottom: 5,
-              fontFamily: "Helvetica",
-            }}
-          >
-            Select your State
-          </Text>
-          <Dropdown
-            data={states}
-            search
-            maxHeight={300}
-            labelField="statename"
-            valueField="statename"
-            placeholder={!isFocus ? "Select a State" : "..."}
-            searchPlaceholder="Search..."
-            value={selectedCountry}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setSelectedState(item.statename);
-              handleStateCity(item.stateIso, item.cCode);
-              setIsFocus(false);
-            }}
-            keyboardAvoiding={true}
-            style={styles.regionSelector}
+          <FloatingLabelInput
+            label="Area"
+            onChangeText={setArea}
+            value={area}
           />
           <View style={styles.regionContainer}>
             <Text
@@ -221,39 +178,104 @@ const AddressRegisterScreen = ({ navigation, route }: AddressProps) => {
                 fontFamily: "Helvetica",
               }}
             >
-              Select a City
+              Select a Region
             </Text>
+
             <Dropdown
-              data={cities}
+              data={countries}
               search
               maxHeight={300}
-              labelField="cityName"
-              valueField="cityName"
-              placeholder={!isFocus ? "Select a City" : "..."}
+              labelField="countryname"
+              valueField="countryname"
+              placeholder={!isFocus ? "Select a Country" : "..."}
               searchPlaceholder="Search..."
               value={selectedCountry}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={(item) => {
-                setSelectedCity(item.cityName);
+                setSelectedCountry(item.countryname);
+                handleCountryState(item.countryIso);
                 setIsFocus(false);
               }}
               keyboardAvoiding={true}
               style={styles.regionSelector}
             />
           </View>
-        </View>
+          <View style={styles.regionContainer}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: "#015867",
+                marginBottom: 5,
+                fontFamily: "Helvetica",
+              }}
+            >
+              Select your State
+            </Text>
+            <Dropdown
+              data={states}
+              search
+              maxHeight={300}
+              labelField="statename"
+              valueField="statename"
+              placeholder={!isFocus ? "Select a State" : "..."}
+              searchPlaceholder="Search..."
+              value={selectedCountry}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setSelectedState(item.statename);
+                handleStateCity(item.stateIso, item.cCode);
+                setIsFocus(false);
+              }}
+              keyboardAvoiding={true}
+              style={styles.regionSelector}
+            />
+            <View style={styles.regionContainer}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#015867",
+                  marginBottom: 5,
+                  fontFamily: "Helvetica",
+                }}
+              >
+                Select a City
+              </Text>
+              <Dropdown
+                data={cities}
+                search
+                maxHeight={300}
+                labelField="cityName"
+                valueField="cityName"
+                placeholder={!isFocus ? "Select a City" : "..."}
+                searchPlaceholder="Search..."
+                value={selectedCountry}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setSelectedCity(item.cityName);
+                  setIsFocus(false);
+                }}
+                keyboardAvoiding={true}
+                style={styles.regionSelector}
+              />
+            </View>
+          </View>
 
-        <FloatingLabelInput
-          label="Pincode"
-          onChangeText={setPincode}
-          value={pincode}
-        />
-      </View>
+          <FloatingLabelInput
+            label="Pincode"
+            onChangeText={setPincode}
+            value={pincode}
+          />
+        </View>
+      </ScrollView>
+
       <View
         style={{
           alignItems: "center",
           justifyContent: "center",
+          flex: 0.2,
         }}
       >
         <Button

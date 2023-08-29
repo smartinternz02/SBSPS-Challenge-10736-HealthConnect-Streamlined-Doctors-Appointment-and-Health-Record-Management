@@ -1,12 +1,21 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import React, { useState } from "react";
 import FloatingLabelInput from "../Components/FloatingLabelInput";
 import Button from "../Components/Button";
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/authSlice";
 
 type Props = {
   navigation: NavigationProp<any>;
@@ -15,7 +24,22 @@ type Props = {
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
+  const auth = useSelector((state: any) => state.auth);
+
+  const handleLogin = () => {
+    if (email !== auth.user.email) {
+      console.log("email");
+      return;
+    }
+    if (password !== auth.user.password) {
+      console.log("password");
+      return;
+    }
+    dispatch(login(auth.user));
+    navigation.navigate("Home");
+  };
   return (
     <View style={styles.loginContainer}>
       <View style={styles.logoContainer}>
@@ -60,7 +84,27 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Login" onPress={() => {}} />
+        <Pressable
+          style={{
+            width: 250,
+            height: 60,
+            backgroundColor: "#11B3CF",
+            alignContent: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+          }}
+          onPress={handleLogin}
+        >
+          <Text style={{ textAlign: "center", color: "#FFFFFF", fontSize: 20 }}>
+            Login
+          </Text>
+        </Pressable>
+      </View>
+      <View>
+        <Text style={{ textAlign: "center", color: "#106293" }}>Or</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Emergency Appointment" onPress={() => {}} />
       </View>
     </View>
   );
@@ -83,8 +127,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   vectorImg: {
-    width: 150,
-    height: 150,
+    width: 80,
+    height: 80,
     borderRadius: 100,
     marginTop: 20,
     marginBottom: 20,

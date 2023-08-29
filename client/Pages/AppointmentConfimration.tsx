@@ -8,13 +8,17 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Feather";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import moment from "moment";
+import { useDispatch } from "react-redux";
+import { setAppointment } from "../redux/appointmentSlice";
 
 const AppointmentConfimration = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute<any>();
   const [appointmentDetails, setAppointmentDetails] = useState(
     route.params.appointmentDetails
@@ -22,9 +26,32 @@ const AppointmentConfimration = () => {
   const [hospitalData, setHospitalData] = useState(route.params.hospitalData);
   const [selectedMethod, setSelectedMethod] = useState("");
   const [showInstructions, setShowInstructions] = useState(false);
+  const [paymentPrice, setPaymentPrice] = useState("₹ 200.00");
 
   const handleMethodSelect = (method: string) => {
     setSelectedMethod(method);
+  };
+  const dispatch = useDispatch();
+
+  const handleFixAppointment = () => {
+    if (!selectedMethod) {
+      return;
+    }
+    dispatch(
+      setAppointment({
+        hospital: hospitalData,
+        appointment: appointmentDetails,
+        paymentPrice: paymentPrice,
+        selectedMethod: selectedMethod,
+        status: "pending",
+      })
+    );
+    navigation.navigate("AppointmentRequested", {
+      hospitalData,
+      appointmentDetails,
+      paymentPrice,
+      selectedMethod,
+    });
   };
   return (
     <View
@@ -188,7 +215,7 @@ const AppointmentConfimration = () => {
                     Total Charges
                   </Text>
                   <Text style={[styles.amount, styles.totalAmount]}>
-                    ₹ 200.00
+                    {paymentPrice}
                   </Text>
                 </View>
               </View>
@@ -329,6 +356,7 @@ const AppointmentConfimration = () => {
           justifyContent: "center",
           padding: 5,
         }}
+        onPress={handleFixAppointment}
       >
         <View
           style={{ padding: 20, backgroundColor: "#75C44C", borderRadius: 30 }}
